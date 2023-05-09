@@ -1,8 +1,13 @@
+using EQUOR.DataContext;
+using Microsoft.EntityFrameworkCore;
+using System;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-
+builder.Services.AddDbContext<DataDBContext>(opciones =>
+opciones.UseSqlServer("name=DefaultConnection"));
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
