@@ -1,0 +1,35 @@
+﻿@model EQUOR.Models.Product
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+@{
+    ViewData["Title"] = "viewsCarbon";
+}
+
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 mx-auto">
+                <h2 class="text-center mb-4">Huella de carbono</h2>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Transporte</th>
+                            <th scope="col">Agua utilizada</th>
+                            <th scope="col">Energía utilizada</th>
+                            <th scope="col">Desechos generados</th>
+                            <th scope="col">Huella de carbono</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>{{Model.TipeTransport}}</td>
+                            <td>{{Model.QWaterUsed}}</td>
+                            <td>{{Model.QEnergy}}</td>
+                            <td>{{Model.QWaste}}</td>
+                            <td>{{Model.CarbonFootprint}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+}

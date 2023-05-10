@@ -3,9 +3,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EQUOR.DataContext
 {
-	public class DataDBContext : DbContext
-	{
-        public DataDBContext(DbContextOptions dbContextOptions ) :base ( dbContextOptions ) { 
+    public class DataDBContext : DbContext
+    {
+        public DataDBContext(DbContextOptions dbContextOptions) : base(dbContextOptions)
+        {
         }
         public DbSet<Product> Products { get; set; }
         public DbSet<Consumer> Consumers { get; set; }
@@ -15,7 +16,9 @@ namespace EQUOR.DataContext
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-
+            modelBuilder.Entity<Product>()
+    .Property(p => p.CodigoQR)
+    .HasColumnType("varbinary(MAX)");
             foreach (var entityType in modelBuilder.Model.GetEntityTypes())
             {
                 var properties = entityType.ClrType.GetProperties().Where(p => p.Name == "Id" || p.Name == $"{entityType.ClrType.Name}Id");

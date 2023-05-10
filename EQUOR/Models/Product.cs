@@ -1,5 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using System.Reflection.Metadata;
+using QRCoder;
+using System.Drawing.Imaging;
 
 namespace EQUOR.Models
 {
@@ -15,12 +18,13 @@ namespace EQUOR.Models
         public int QWaterUsed { get; set; }
         public int QEnergy { get; set; }
         public int QWaste { get; set; }
-        public string CodigoQR { get; set; }
+        public byte[] CodigoQR { get; set; }
         public double CarbonFootprint { get; set; }
         public int TimeSearch { get; set; }
 
         [ForeignKey("IdManager")]
         public Manager Manager { get; set; }
+
         public double CalculateCarbonFootprint(string tipeTransport, int qWaterUsed, int qEnergy, int qWaste)
         {
             double huellaCarbono = 0;
@@ -51,6 +55,18 @@ namespace EQUOR.Models
             huellaCarbono += qWaste * 50; // Supongamos que se emiten 50 kg de CO2 por cada tonelada de residuos generada
 
             return huellaCarbono;
+        }
+        public byte[] GenerateQRCode(string content)
+        {
+            
+            using var qrGenerator = new QRCodeGenerator();
+            using var qrCodeData = qrGenerator.CreateQrCode(content, QRCodeGenerator.ECCLevel.Q);
+            //using var qrCode = new QRCoder (qrCodeData);
+           // using var qrCodeBitmap = qrCode.GetGraphic(20);
+
+            using var memoryStream = new MemoryStream();
+            //qrCodeBitmap.Save(memoryStream, ImageFormat.Png);
+            return memoryStream.ToArray();
         }
 
     }

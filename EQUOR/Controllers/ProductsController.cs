@@ -23,21 +23,7 @@ namespace EQUOR.Controllers
         // GET: Products
         public async Task<IActionResult> Index(int productId)
         {
-            // Buscar el producto en la base de datos
-            var product = _context.Products.Find(productId);
-
-            // Calcular la huella de carbono del producto
-            var carbonFootprint = product.CalculateCarbonFootprint(product.TipeTransport,
-                                                           product.QWaterUsed,
-                                                           product.QEnergy,
-                                                           product.QWaste);
-
-            // Actualizar el valor de la huella de carbono en la base de datos
-            product.CarbonFootprint = carbonFootprint;
-            _context.SaveChanges();
-
-            // Retornar la huella de carbono calculada
-            return Ok(carbonFootprint);
+          
             var dataDBContext = _context.Products.Include(p => p.Manager);
             return View(await dataDBContext.ToListAsync());
         }
@@ -60,7 +46,7 @@ namespace EQUOR.Controllers
 
             return View(product);
         }
-       
+    
 
 
 
@@ -78,12 +64,30 @@ namespace EQUOR.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("IdProduct,IdManager,Name,DesProduct,TipeTransport,QWaterUsed,QEnergy,QWaste,CodigoQR,CarbonFootprint,TimeSearch")] Product product)
         {
+
             if (ModelState.IsValid)
             {
                 _context.Add(product);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
+                // Buscar el producto en la base de datos
+                
+
+                // Calcular la huella de carbono del producto
+                var carbonFootprint = product.CalculateCarbonFootprint(product.TipeTransport,
+                                                               product.QWaterUsed,
+                                                               product.QEnergy,
+                                                               product.QWaste);
+
+                // Actualizar el valor de la huella de carbono en la base de datos
+                product.CarbonFootprint = carbonFootprint;
+                _context.SaveChanges();
+
+                // Retornar la huella de carbono calculada
+                return Ok(carbonFootprint);
+
             }
+
             ViewData["IdManager"] = new SelectList(_context.Set<Manager>(), "IdManager", "IdManager", product.IdManager);
             return View(product);
         }
