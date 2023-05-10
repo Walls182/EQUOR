@@ -4,6 +4,7 @@ using System.Reflection.Metadata;
 using QRCoder;
 using System.Drawing.Imaging;
 using Microsoft.EntityFrameworkCore;
+using EQUOR.DataContext;
 
 namespace EQUOR.Models
 {
@@ -20,7 +21,7 @@ namespace EQUOR.Models
         public byte[] CodigoQR { get; set; }
         public double CarbonFootprint { get; set; }
         public int TimeSearch { get; set; }
-
+        private readonly DataDBContext _context;
         public double CalculateCarbonFootprint(string tipeTransport, int qWaterUsed, int qEnergy, int qWaste)
         {
             double huellaCarbono = 0;
@@ -70,8 +71,8 @@ namespace EQUOR.Models
 
         public int UpdateSearchCount(int idProduct)
         {
-            //var product = _context.Products.Find(idProduct);
-           // product.TimeSearch++;
+            var product = _context.Products.Find(idProduct);
+            product.TimeSearch++;
             return TimeSearch;
         }
 

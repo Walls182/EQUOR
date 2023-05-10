@@ -60,10 +60,37 @@ namespace EQUOR.Controllers
         {
             if (ModelState.IsValid)
             {
+                int lastProductId = _context.Products.Max(p => p.IdProduct);
+
+                // Incrementar el IdProduct en uno y asignarlo al nuevo objeto Product
+                product.IdProduct = lastProductId + 1;
+                // Calcular la huella de carbono del producto
+                var carbonFootprint = product.CalculateCarbonFootprint(product.TipeTransport, product.QWaterUsed, product.QEnergy, product.QWaste);
+
+                // Generar el código QR del producto
+                var codigoQR = product.GenerateQrCode(product.IdProduct.ToString());
+
+
+
+
+
+                // Guardar el tiempo de búsqueda del producto
+
+                var time = product.UpdateSearchCount(product.IdProduct);
+
+                // Actualizar el valor de la huella de carbono, código QR y tiempo de búsqueda en la base de datos
+                product.CarbonFootprint = carbonFootprint;
+                product.CodigoQR = codigoQR;
+                product.TimeSearch = time;
+
+
+                // Agregar el producto a la base de datos y redirigir a la acción Index
                 _context.Add(product);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+
+            
             return View(product);
         }
 
