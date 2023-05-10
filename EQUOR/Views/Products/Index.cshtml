@@ -1,0 +1,89 @@
+﻿@model IEnumerable<EQUOR.Models.Product>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DesProduct)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TipeTransport)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.QWaterUsed)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.QEnergy)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.QWaste)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CodigoQR)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CarbonFootprint)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TimeSearch)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Manager)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DesProduct)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TipeTransport)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.QWaterUsed)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.QEnergy)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.QWaste)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CodigoQR)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CarbonFootprint)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TimeSearch)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Manager.IdManager)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.IdProduct">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.IdProduct">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.IdProduct">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
