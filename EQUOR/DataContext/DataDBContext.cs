@@ -12,27 +12,9 @@ namespace EQUOR.DataContext
         public DbSet<Consumer> Consumers { get; set; }
         public DbSet<Company> Companies { get; set; }
         public DbSet<Opinions> Opinions { get; set; }
+        public DbSet<Role> Roles { get; set; }    
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            base.OnModelCreating(modelBuilder);
-            modelBuilder.Entity<Product>()
-    .Property(p => p.CodigoQR)
-    .HasColumnType("varbinary(MAX)");
-            foreach (var entityType in modelBuilder.Model.GetEntityTypes())
-            {
-                var properties = entityType.ClrType.GetProperties().Where(p => p.Name == "Id" || p.Name == $"{entityType.ClrType.Name}Id");
-
-                foreach (var property in properties)
-                {
-                    if (property.PropertyType == typeof(int))
-                    {
-                        modelBuilder.Entity(entityType.Name).Property(property.Name)
-                            .ValueGeneratedOnAdd();
-                    }
-                }
-            }
-        }
+      
 
     }
 }

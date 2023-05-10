@@ -39,9 +39,6 @@
             <th>
                 @Html.DisplayNameFor(model => model.TimeSearch)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Manager)
-            </th>
             <th></th>
         </tr>
     </thead>
@@ -74,9 +71,6 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.TimeSearch)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Manager.IdManager)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.IdProduct">Edit</a> |

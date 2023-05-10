@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Reflection.Metadata;
 using QRCoder;
 using System.Drawing.Imaging;
+using Microsoft.EntityFrameworkCore;
 
 namespace EQUOR.Models
 {
@@ -10,8 +11,6 @@ namespace EQUOR.Models
 	{
         [Key]
         public int IdProduct { get; set; }
-
-        public int IdManager { get; set; }
         public string Name { get; set; }
         public string DesProduct { get; set; }
         public string TipeTransport { get; set; }
@@ -21,9 +20,6 @@ namespace EQUOR.Models
         public byte[] CodigoQR { get; set; }
         public double CarbonFootprint { get; set; }
         public int TimeSearch { get; set; }
-
-        [ForeignKey("IdManager")]
-        public Manager Manager { get; set; }
 
         public double CalculateCarbonFootprint(string tipeTransport, int qWaterUsed, int qEnergy, int qWaste)
         {
@@ -56,18 +52,31 @@ namespace EQUOR.Models
 
             return huellaCarbono;
         }
-        public byte[] GenerateQRCode(string content)
-        {
-            
-            using var qrGenerator = new QRCodeGenerator();
-            using var qrCodeData = qrGenerator.CreateQrCode(content, QRCodeGenerator.ECCLevel.Q);
-            //using var qrCode = new QRCoder (qrCodeData);
-           // using var qrCodeBitmap = qrCode.GetGraphic(20);
 
-            using var memoryStream = new MemoryStream();
-            //qrCodeBitmap.Save(memoryStream, ImageFormat.Png);
-            return memoryStream.ToArray();
+
+        public byte[] GenerateQrCode(string data)
+        {
+            var qrGenerator = new QRCodeGenerator();
+            var qrCodeData = qrGenerator.CreateQrCode(data, QRCodeGenerator.ECCLevel.Q);
+            var qrCode = new QRCode(qrCodeData);
+            var qrCodeImage = qrCode.GetGraphic(20);
+
+            using (var stream = new MemoryStream())
+            {
+                qrCodeImage.Save(stream, ImageFormat.Png);
+                return stream.ToArray();
+            }
         }
+
+        public int UpdateSearchCount(int idProduct)
+        {
+            //var product = _context.Products.Find(idProduct);
+           // product.TimeSearch++;
+            return TimeSearch;
+        }
+
+
+
 
     }
 }

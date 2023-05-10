@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EQUOR.Migrations
 {
     [DbContext(typeof(DataDBContext))]
-    [Migration("20230509165240_Initial")]
-    partial class Initial
+    [Migration("20230510205957_mig1")]
+    partial class mig1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -45,6 +45,9 @@ namespace EQUOR.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("IdRole")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -58,6 +61,8 @@ namespace EQUOR.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("IdCompany");
+
+                    b.HasIndex("IdRole");
 
                     b.ToTable("Companies");
                 });
@@ -74,6 +79,9 @@ namespace EQUOR.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("IdRole")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -84,37 +92,9 @@ namespace EQUOR.Migrations
 
                     b.HasKey("IdConsumer");
 
+                    b.HasIndex("IdRole");
+
                     b.ToTable("Consumers");
-                });
-
-            modelBuilder.Entity("EQUOR.Models.Manager", b =>
-                {
-                    b.Property<int>("IdManager")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdManager"));
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("IdCompany")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("IdManager");
-
-                    b.HasIndex("IdCompany");
-
-                    b.ToTable("Manager");
                 });
 
             modelBuilder.Entity("EQUOR.Models.Opinions", b =>
@@ -155,19 +135,16 @@ namespace EQUOR.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdProduct"));
 
-                    b.Property<int>("CarbonFootprint")
-                        .HasColumnType("int");
+                    b.Property<double>("CarbonFootprint")
+                        .HasColumnType("float");
 
-                    b.Property<string>("CodigoQR")
+                    b.Property<byte[]>("CodigoQR")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("varbinary(max)");
 
                     b.Property<string>("DesProduct")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("IdManager")
-                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -191,20 +168,46 @@ namespace EQUOR.Migrations
 
                     b.HasKey("IdProduct");
 
-                    b.HasIndex("IdManager");
-
                     b.ToTable("Products");
                 });
 
-            modelBuilder.Entity("EQUOR.Models.Manager", b =>
+            modelBuilder.Entity("EQUOR.Models.Role", b =>
                 {
-                    b.HasOne("EQUOR.Models.Company", "Company")
+                    b.Property<int>("IdRole")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdRole"));
+
+                    b.Property<string>("Nombre")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("IdRole");
+
+                    b.ToTable("Roles");
+                });
+
+            modelBuilder.Entity("EQUOR.Models.Company", b =>
+                {
+                    b.HasOne("EQUOR.Models.Role", "Role")
                         .WithMany()
-                        .HasForeignKey("IdCompany")
+                        .HasForeignKey("IdRole")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Company");
+                    b.Navigation("Role");
+                });
+
+            modelBuilder.Entity("EQUOR.Models.Consumer", b =>
+                {
+                    b.HasOne("EQUOR.Models.Role", "Role")
+                        .WithMany()
+                        .HasForeignKey("IdRole")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Role");
                 });
 
             modelBuilder.Entity("EQUOR.Models.Opinions", b =>
@@ -224,17 +227,6 @@ namespace EQUOR.Migrations
                     b.Navigation("Consumer");
 
                     b.Navigation("Product");
-                });
-
-            modelBuilder.Entity("EQUOR.Models.Product", b =>
-                {
-                    b.HasOne("EQUOR.Models.Manager", "Manager")
-                        .WithMany()
-                        .HasForeignKey("IdManager")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Manager");
                 });
 #pragma warning restore 612, 618
         }

@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using EQUOR.DataContext;
 using EQUOR.Models;
-using Microsoft.CodeAnalysis;
 
 namespace EQUOR.Controllers
 {
@@ -21,11 +20,11 @@ namespace EQUOR.Controllers
         }
 
         // GET: Products
-        public async Task<IActionResult> Index(int productId)
+        public async Task<IActionResult> Index()
         {
-          
-            var dataDBContext = _context.Products.Include(p => p.Manager);
-            return View(await dataDBContext.ToListAsync());
+              return _context.Products != null ? 
+                          View(await _context.Products.ToListAsync()) :
+                          Problem("Entity set 'DataDBContext.Products'  is null.");
         }
 
         // GET: Products/Details/5
@@ -37,7 +36,6 @@ namespace EQUOR.Controllers
             }
 
             var product = await _context.Products
-                .Include(p => p.Manager)
                 .FirstOrDefaultAsync(m => m.IdProduct == id);
             if (product == null)
             {
@@ -46,14 +44,10 @@ namespace EQUOR.Controllers
 
             return View(product);
         }
-    
-
-
 
         // GET: Products/Create
         public IActionResult Create()
         {
-            ViewData["IdManager"] = new SelectList(_context.Set<Manager>(), "IdManager", "IdManager");
             return View();
         }
 
@@ -62,33 +56,14 @@ namespace EQUOR.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("IdProduct,IdManager,Name,DesProduct,TipeTransport,QWaterUsed,QEnergy,QWaste,CodigoQR,CarbonFootprint,TimeSearch")] Product product)
+        public async Task<IActionResult> Create([Bind("IdProduct,Name,DesProduct,TipeTransport,QWaterUsed,QEnergy,QWaste,CodigoQR,CarbonFootprint,TimeSearch")] Product product)
         {
-
             if (ModelState.IsValid)
             {
                 _context.Add(product);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
-                // Buscar el producto en la base de datos
-                
-
-                // Calcular la huella de carbono del producto
-                var carbonFootprint = product.CalculateCarbonFootprint(product.TipeTransport,
-                                                               product.QWaterUsed,
-                                                               product.QEnergy,
-                                                               product.QWaste);
-
-                // Actualizar el valor de la huella de carbono en la base de datos
-                product.CarbonFootprint = carbonFootprint;
-                _context.SaveChanges();
-
-                // Retornar la huella de carbono calculada
-                return Ok(carbonFootprint);
-
             }
-
-            ViewData["IdManager"] = new SelectList(_context.Set<Manager>(), "IdManager", "IdManager", product.IdManager);
             return View(product);
         }
 
@@ -105,7 +80,6 @@ namespace EQUOR.Controllers
             {
                 return NotFound();
             }
-            ViewData["IdManager"] = new SelectList(_context.Set<Manager>(), "IdManager", "IdManager", product.IdManager);
             return View(product);
         }
 
@@ -114,7 +88,7 @@ namespace EQUOR.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("IdProduct,IdManager,Name,DesProduct,TipeTransport,QWaterUsed,QEnergy,QWaste,CodigoQR,CarbonFootprint,TimeSearch")] Product product)
+        public async Task<IActionResult> Edit(int id, [Bind("IdProduct,Name,DesProduct,TipeTransport,QWaterUsed,QEnergy,QWaste,CodigoQR,CarbonFootprint,TimeSearch")] Product product)
         {
             if (id != product.IdProduct)
             {
@@ -141,7 +115,6 @@ namespace EQUOR.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["IdManager"] = new SelectList(_context.Set<Manager>(), "IdManager", "IdManager", product.IdManager);
             return View(product);
         }
 
@@ -154,7 +127,6 @@ namespace EQUOR.Controllers
             }
 
             var product = await _context.Products
-                .Include(p => p.Manager)
                 .FirstOrDefaultAsync(m => m.IdProduct == id);
             if (product == null)
             {
