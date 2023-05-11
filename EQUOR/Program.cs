@@ -1,11 +1,24 @@
 using EQUOR.DataContext;
 using Microsoft.EntityFrameworkCore;
 using System;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(option =>
+{
+	option.LoginPath = "/Acceso/Index";
+	option.ExpireTimeSpan = TimeSpan.FromMinutes(20);
+	option.AccessDeniedPath = "/Home/Privacy";
+});
+	
+
+
+
+
 builder.Services.AddDbContext<DataDBContext>(opciones =>
 opciones.UseSqlServer("name=DefaultConnection"));
 var app = builder.Build();
@@ -23,6 +36,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.UseEndpoints(endpoints =>

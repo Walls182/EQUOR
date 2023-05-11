@@ -5,6 +5,10 @@ namespace EQUOR.DataContext
 {
     public class DataDBContext : DbContext
     {
+        public DataDBContext()
+        {
+        }
+
         public DataDBContext(DbContextOptions dbContextOptions) : base(dbContextOptions)
         {
         }

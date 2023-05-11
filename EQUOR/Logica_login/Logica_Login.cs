@@ -66,7 +66,7 @@ namespace EQUOR.Logica_login
                         {
                             Email = reader["Email"].ToString(),
                             Password = reader["Password"].ToString(),
-                            
+                         
 
                         };
                     }
