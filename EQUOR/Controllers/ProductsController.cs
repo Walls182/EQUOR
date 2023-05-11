@@ -34,6 +34,19 @@ namespace EQUOR.Controllers
                           View(await _context.Products.ToListAsync()) :
                           Problem("Entity set 'DataDBContext.Products'  is null.");
         }
+        public IActionResult Scan()
+        {
+            return View();
+        }
+        public IActionResult DetailsConsumer(byte[] id)
+        {
+            var product = _context.Products.FirstOrDefault(p => p.CodigoQR == id);
+            if (product == null)
+            {
+                return NotFound();
+            }
+            return View(product);
+        }
 
         // GET: Products/Details/5
         public async Task<IActionResult> Details(int? id)
