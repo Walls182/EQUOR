@@ -22,12 +22,20 @@ namespace EQUOR.Controllers
 		{
 			return View();
 		}
-
-        public IActionResult CerrarSesion()
+        public IActionResult Manager()
         {
-            return RedirectToAction("Index", "Acceso");
-            
+            return View();
         }
+        public IActionResult Consumer()
+        {
+            return View();
+        }
+        public IActionResult Company()
+        {
+            return View();
+        }
+
+        
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
 		public IActionResult Error()
