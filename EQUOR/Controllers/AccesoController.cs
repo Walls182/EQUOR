@@ -2,6 +2,7 @@
 using EQUOR.Logica_login;
 using Microsoft.AspNetCore.Mvc;
 
+
 namespace EQUOR.Controllers
 {
     public class AccesoController : Controller
@@ -17,6 +18,7 @@ namespace EQUOR.Controllers
             Consumer objeto = new Logica_Login().EncontrarConsumer(correo,clave);
             if (objeto.Email != null)
             {
+             
                 return RedirectToAction("Index", "Home");
             }
             return View();
