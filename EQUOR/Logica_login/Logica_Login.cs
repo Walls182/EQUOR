@@ -48,7 +48,7 @@ namespace EQUOR.Logica_login
             using (SqlConnection con = new SqlConnection("Server=DESKTOP-JK7M5A1\\SQLEXPRESS;Database=EQUOR;Integrated Security=True;trustServerCertificate=True"))
             {
 
-                string query = "select Email,Password from Manager where Email=@pEmail and Password=@pPassword";
+                string query = "select Email,Password from Consumers where Email=@pEmail and Password=@pPassword";
 
                 SqlCommand cmd = new SqlCommand(query, con);
                 cmd.Parameters.AddWithValue("@pEmail", correo);
@@ -63,6 +63,40 @@ namespace EQUOR.Logica_login
                     while (reader.Read())
                     {
                         objeto = new Consumer()
+                        {
+                            Email = reader["Email"].ToString(),
+                            Password = reader["Password"].ToString(),
+                            
+
+                        };
+                    }
+                }
+            }
+            return objeto;
+        }
+        public Company EncontrarCompany(string correo, string clave)
+        {
+
+            Company objeto = new Company();
+
+            using (SqlConnection con = new SqlConnection("Server=DESKTOP-JK7M5A1\\SQLEXPRESS;Database=EQUOR;Integrated Security=True;trustServerCertificate=True"))
+            {
+
+                string query = "select Email,Password from Manager where Email=@pEmail and Password=@pPassword";
+
+                SqlCommand cmd = new SqlCommand(query, con);
+                cmd.Parameters.AddWithValue("@pEmail", correo);
+                cmd.Parameters.AddWithValue("@pPassword", clave);
+
+                cmd.CommandType = CommandType.Text;
+
+                con.Open();
+
+                using (SqlDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        objeto = new Company()
                         {
                             Email = reader["Email"].ToString(),
                             Password = reader["Password"].ToString(),
