@@ -2,8 +2,13 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
+
 namespace EQUOR.Controllers
 {
+
+	//[Authorize]
 	public class HomeController : Controller
 	{
 		private readonly ILogger<HomeController> _logger;
@@ -22,14 +27,20 @@ namespace EQUOR.Controllers
 		{
 			return View();
 		}
+
+        [Authorize(Roles = "1")]
         public IActionResult Manager()
         {
             return View();
         }
+
+        [Authorize(Roles = "2")]
         public IActionResult Consumer()
         {
             return View();
         }
+
+        [Authorize(Roles = "3")]
         public IActionResult Company()
         {
             return View();
