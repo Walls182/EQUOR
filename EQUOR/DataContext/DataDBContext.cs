@@ -12,9 +12,11 @@ namespace EQUOR.DataContext
         public DbSet<Consumer> Consumers { get; set; }
         public DbSet<Company> Companies { get; set; }
         public DbSet<Opinions> Opinions { get; set; }
-        public DbSet<Role> Roles { get; set; }    
+        public DbSet<Role> Roles { get; set; }
+        public DbSet<Manager> Managers { get; set; }
+        public DbSet<ProductSearch> ProductSearches { get; set; }
 
-      
+
 
     }
 }

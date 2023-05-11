@@ -4,59 +4,52 @@
     ViewData["Title"] = "Create";
 }
 
-<h1>Create</h1>
+<h1>Crear</h1>
 
-<h4>Product</h4>
+<h4>Producto</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
+                <label asp-for="Name" class="control-label">Nombre</label>
                 <input asp-for="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="DesProduct" class="control-label"></label>
+                <label asp-for="DesProduct" class="control-label">Descripcion del producto</label>
                 <input asp-for="DesProduct" class="form-control" />
                 <span asp-validation-for="DesProduct" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="TipeTransport" class="control-label"></label>
-                <input asp-for="TipeTransport" class="form-control" />
+                <label asp-for="TipeTransport" class="control-label">Tipo de transporte usado</label>
+                <select asp-for="TipeTransport" class="form-control">
+                    <option value="">--Seleccione una opción--</option>
+                    <option value="Avión">Avión</option>
+                    <option value="Barco">Barco</option>
+                    <option value="Camión">Camión</option>
+                    <option value="Tren">Tren</option>
+                </select>
                 <span asp-validation-for="TipeTransport" class="text-danger"></span>
             </div>
+
             <div class="form-group">
-                <label asp-for="QWaterUsed" class="control-label"></label>
+                <label asp-for="QWaterUsed" class="control-label">Cantidad de agua usada</label>
                 <input asp-for="QWaterUsed" class="form-control" />
                 <span asp-validation-for="QWaterUsed" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="QEnergy" class="control-label"></label>
+                <label asp-for="QEnergy" class="control-label">Cantidad de energia consumida</label>
                 <input asp-for="QEnergy" class="form-control" />
                 <span asp-validation-for="QEnergy" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="QWaste" class="control-label"></label>
+                <label asp-for="QWaste" class="control-label">Cantidad de desechos producidos</label>
                 <input asp-for="QWaste" class="form-control" />
                 <span asp-validation-for="QWaste" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="CodigoQR" class="control-label"></label>
-                <input asp-for="CodigoQR" class="form-control" />
-                <span asp-validation-for="CodigoQR" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CarbonFootprint" class="control-label"></label>
-                <input asp-for="CarbonFootprint" class="form-control" />
-                <span asp-validation-for="CarbonFootprint" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="TimeSearch" class="control-label"></label>
-                <input asp-for="TimeSearch" class="form-control" />
-                <span asp-validation-for="TimeSearch" class="text-danger"></span>
-            </div>
+          
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>

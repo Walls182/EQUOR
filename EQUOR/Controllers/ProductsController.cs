@@ -7,6 +7,14 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using EQUOR.DataContext;
 using EQUOR.Models;
+using QRCoder;
+using System.Drawing.Imaging;
+using static System.Net.Mime.MediaTypeNames;
+using System.Drawing;
+using System.Runtime.InteropServices;
+using ZXing.Common;
+using ZXing;
+using ZXing.QrCode.Internal;
 
 namespace EQUOR.Controllers
 {
@@ -44,7 +52,79 @@ namespace EQUOR.Controllers
 
             return View(product);
         }
+        private double CalculateCarbonFootprint(int qWaterUsed, int qEnergy, int qWaste, string tipeTransport)
+        {
+            double carbonFootprint;
 
+            // Convertir las cantidades a las unidades adecuadas según el tipo de transporte
+            switch (tipeTransport)
+            {
+                case "Avión":
+                    qWaterUsed = (int)(qWaterUsed * 0.7);
+                    qEnergy = (int)(qEnergy * 2.4);
+                    qWaste = (int)(qWaste * 1.3);
+                    break;
+                case "Barco":
+                    qWaterUsed = (int)(qWaterUsed * 1.5);
+                    qEnergy = (int)(qEnergy * 0.5);
+                    qWaste = (int)(qWaste * 1.1);
+                    break;
+                case "Camión":
+                    qWaterUsed = (int)(qWaterUsed * 1.1);
+                    qEnergy = (int)(qEnergy * 1.2);
+                    qWaste = (int)(qWaste * 1.2);
+                    break;
+                case "Tren":
+                    qWaterUsed = (int)(qWaterUsed * 0.9);
+                    qEnergy = (int)(qEnergy * 0.8);
+                    qWaste = (int)(qWaste * 0.9);
+                    break;
+                default:
+                    break;
+            }
+
+            // Huella de carbono en toneladas
+            carbonFootprint = ((qWaterUsed * 0.002) + (qEnergy * 0.0009) + (qWaste * 0.001)) / 1000;
+
+            return carbonFootprint;
+        }
+
+        private async Task<int> GetProductSearchCount(int productId)
+        {
+            //Metodo que cuenta los registros de la tabla de productsearches
+            var productSearches = await _context.ProductSearches.Where(ps => ps.ProductId == productId).ToListAsync();
+            return productSearches.Count();
+        }
+
+        private byte[] GenerateQRCode(String text)
+        {
+            var barcodeWriter = new BarcodeWriterPixelData
+            {
+                Format = BarcodeFormat.QR_CODE,
+                Options = new EncodingOptions
+                {
+                    Height = 200,
+                    Width = 200,
+                    Margin = 10
+                }
+            };
+
+            var pixelData = barcodeWriter.Write(text);
+            var bitmap = new Bitmap(pixelData.Width, pixelData.Height, PixelFormat.Format32bppRgb);
+
+            BitmapData bmpData = bitmap.LockBits(new Rectangle(0, 0, pixelData.Width, pixelData.Height),
+                                                 ImageLockMode.WriteOnly,
+                                                 bitmap.PixelFormat);
+
+            Marshal.Copy(pixelData.Pixels, 0, bmpData.Scan0, pixelData.Pixels.Length);
+            bitmap.UnlockBits(bmpData);
+
+            using (var stream = new MemoryStream())
+            {
+                bitmap.Save(stream, ImageFormat.Png);
+                return stream.ToArray();
+            }
+        }
         // GET: Products/Create
         public IActionResult Create()
         {
@@ -56,42 +136,37 @@ namespace EQUOR.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("IdProduct,Name,DesProduct,TipeTransport,QWaterUsed,QEnergy,QWaste,CodigoQR,CarbonFootprint,TimeSearch")] Product product)
+        public async Task<IActionResult> Create(ProductViewModel productViewModel)
         {
             if (ModelState.IsValid)
             {
-                int lastProductId = _context.Products.Max(p => p.IdProduct);
+                // Calcular la huella de carbono
+                double carbonFootprint = CalculateCarbonFootprint(productViewModel.QWaterUsed,
+                                                                  productViewModel.QEnergy,
+                                                                  productViewModel.QWaste,
+                                                                  productViewModel.TipeTransport
+                                                                  );
 
-                // Incrementar el IdProduct en uno y asignarlo al nuevo objeto Product
-                product.IdProduct = lastProductId + 1;
-                // Calcular la huella de carbono del producto
-                var carbonFootprint = product.CalculateCarbonFootprint(product.TipeTransport, product.QWaterUsed, product.QEnergy, product.QWaste);
-
-                // Generar el código QR del producto
-                var codigoQR = product.GenerateQrCode(product.IdProduct.ToString());
-
-
-
-
-
-                // Guardar el tiempo de búsqueda del producto
-
-                var time = product.UpdateSearchCount(product.IdProduct);
-
-                // Actualizar el valor de la huella de carbono, código QR y tiempo de búsqueda en la base de datos
-                product.CarbonFootprint = carbonFootprint;
-                product.CodigoQR = codigoQR;
-                product.TimeSearch = time;
-
-
-                // Agregar el producto a la base de datos y redirigir a la acción Index
+                // Generar el código QR
+                string qrCodeText = $"{productViewModel.IdProduct} {productViewModel.Name} {carbonFootprint}";
+                byte[] qrCodeBytes = GenerateQRCode(qrCodeText);
+                var product = new Product
+                {
+                    Name = productViewModel.Name,
+                    DesProduct = productViewModel.DesProduct,
+                    TipeTransport = productViewModel.TipeTransport,
+                    QWaterUsed = productViewModel.QWaterUsed,
+                    QEnergy = productViewModel.QEnergy,
+                    QWaste = productViewModel.QWaste,
+                    CodigoQR = qrCodeBytes,
+                    CarbonFootprint = carbonFootprint,
+                    TimeSearch = await GetProductSearchCount(productViewModel.IdProduct)
+                };
                 _context.Add(product);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-
-            
-            return View(product);
+            return View(productViewModel);
         }
 
         // GET: Products/Edit/5
