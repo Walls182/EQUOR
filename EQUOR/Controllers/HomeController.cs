@@ -29,7 +29,7 @@ namespace EQUOR.Controllers
 			return View();
 		}
 
-        [Authorize(Roles = "1")]
+        [Authorize(Roles = "1,3")]
         public IActionResult Manager()
         {
 
