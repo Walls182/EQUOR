@@ -4,6 +4,7 @@ using System.Diagnostics;
 
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace EQUOR.Controllers
 {
@@ -31,6 +32,7 @@ namespace EQUOR.Controllers
         [Authorize(Roles = "1")]
         public IActionResult Manager()
         {
+
             return View();
         }
 
