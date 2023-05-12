@@ -257,6 +257,19 @@ namespace EQUOR.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        public IActionResult FindQR(byte[] codigoQR)
+        {
+            var producto = _context.Products.FirstOrDefault(p => p.CodigoQR == codigoQR);
+            if (producto != null)
+            {
+                return Json(new { success = true, producto = producto });
+            }
+            else
+            {
+                return Json(new { success = false });
+            }
+        }
+
         private bool ProductExists(int id)
         {
           return (_context.Products?.Any(e => e.IdProduct == id)).GetValueOrDefault();

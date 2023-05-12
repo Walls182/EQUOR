@@ -89,7 +89,6 @@ namespace EQUOR.Controllers
 
         
 
-
         public async Task<IActionResult> CerrarSesion()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);

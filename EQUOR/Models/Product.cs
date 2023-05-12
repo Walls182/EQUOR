@@ -5,11 +5,15 @@ using QRCoder;
 using System.Drawing.Imaging;
 using Microsoft.EntityFrameworkCore;
 using EQUOR.DataContext;
+using Microsoft.AspNetCore.Mvc;
 
 namespace EQUOR.Models
 {
 	public class Product
 	{
+
+        DataDBContext _context;
+
         [Key]
         public int IdProduct { get; set; }
         public string Name { get; set; }
@@ -21,11 +25,11 @@ namespace EQUOR.Models
         public byte[] CodigoQR { get; set; }
         public double CarbonFootprint { get; set; }
         public int TimeSearch { get; set; }
-       
-       
 
 
 
+
+        
 
     }
 }

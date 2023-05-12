@@ -1,0 +1,231 @@
+﻿
+@{
+
+    Layout = null;
+
+}
+
+
+
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+    <meta name="viewport" content="width=device-width" />
+
+    <title>FindQR</title>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/quagga/0.12.1/quagga.min.js"></script>
+
+</head>
+
+<body>
+
+
+
+
+
+
+
+
+    [6:15 PM] WALTER ALEJANDRO SALAZAR CASTRO
+
+
+
+
+    <div>
+
+        <label for="camera-select">Selecciona la cámara:</label>
+
+        <select id="camera-select"></select>
+
+        <button id="scan-button">Escanear código QR</button>
+
+    </div>
+
+
+
+    <div>
+
+        <video id="camera-preview" autoplay></video>
+
+    </div>
+
+
+
+
+
+
+
+    <script>
+
+        // Obtener el elemento video y el botón de escaneo
+
+        const cameraPreview = document.getElementById('camera-preview');
+
+        const scanButton = document.getElementById('scan-button');
+
+
+
+        // Obtener una lista de cámaras disponibles
+
+        navigator.mediaDevices.enumerateDevices()
+
+            .then(devices => {
+
+                // Filtrar solo las cámaras
+
+                const cameras = devices.filter(device => device.kind === 'videoinput');
+
+
+
+                // Agregar las opciones a la lista de selección
+
+                const cameraSelect = document.getElementById('camera-select');
+
+                cameras.forEach(camera => {
+
+                    const option = document.createElement('option');
+
+                    option.value = camera.deviceId;
+
+                    option.text = camera.label || `Cámara ${cameraSelect.options.length + 1}`;
+
+                    cameraSelect.appendChild(option);
+
+                });
+
+
+
+                // Seleccionar la primera cámara de forma predeterminada
+
+                cameraSelect.selectedIndex = 0;
+
+            })
+
+            .catch(error => {
+
+                console.error(error);
+
+            });
+
+
+
+        // Agregar un evento de clic al botón de escaneo
+
+        scanButton.addEventListener('click', () => {
+
+            // Obtener la cámara seleccionada
+
+            const selectedCamera = cameraSelect.value;
+
+
+
+            // Configurar QuaggaJS para leer el código QR
+
+            Quagga.init({
+
+                inputStream: {
+
+                    name: 'Live',
+
+                    type: 'LiveStream',
+
+                    constraints: {
+
+                        deviceId: selectedCamera,
+
+                        width: { min: 640 },
+
+                        height: { min: 480 },
+
+                        facingMode: 'environment'
+
+                    },
+
+                    target: cameraPreview
+
+                },
+
+                decoder: {
+
+                    readers: ['ean_reader']
+
+                }
+
+            }, (err) => {
+
+                if (err) {
+
+                    console.error(err);
+
+                    return;
+
+                }
+
+                // Comenzar la captura de imagen y escaneo de código QR
+
+                Quagga.start();
+
+            });
+
+
+
+            // Agregar un evento para detectar cuando se lee el código QR
+
+            Quagga.onDetected((result) => {
+
+                const codigoQR = result.codeResult.code;
+
+                // Hacer una petición al servidor para buscar el producto con el código QR
+
+                $.ajax({
+
+                    url: "/Productos/BuscarProducto",
+
+                    data: { codigoQR: codigoQR },
+
+                    method: "POST",
+
+                    success: function (result) {
+
+                        if (result.success) {
+
+                            var producto = result.producto;
+
+                            $("#nombreProducto").text(producto.Nombre);
+
+                            $("#descripcionProducto").text(producto.Descripcion);
+
+                            // ... y así sucesivamente para mostrar otros detalles del producto
+
+                        }
+
+                        else {
+
+            alert("Producto no encontrado");
+
+                        }
+
+                    },
+
+                    error: function (xhr, status, error) {
+
+                        // Aquí puedes manejar cualquier error que ocurra
+
+                    }
+
+                });
+
+            });
+
+        });
+
+    </script>
+
+</body>
+</html>
+
+
