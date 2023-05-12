@@ -23,13 +23,13 @@ namespace EQUOR.Controllers
             var Company = _da_Consumer.ValidarCompany(_company.Email, _company.Password);
             var Manager = _da_Consumer.ValidarManager(_manager.Email, _manager.Password);
 
-            if (Consumer != null && Company == null && Manager==null)
+            if (Consumer != null && Company == null && Manager == null)
             {
                 var claims = new List<Claim>
-        {
-                 new Claim(ClaimTypes.Name, Consumer.Email),
-                 new Claim(ClaimTypes.Role, Consumer.IdRole.ToString())
-        };
+    {
+                  new Claim(ClaimTypes.Name, Consumer.Email),
+                  new Claim(ClaimTypes.Role, Consumer.IdRole.ToString())
+    };
 
                 var claimsIdentity = new ClaimsIdentity(
                     claims,
@@ -42,13 +42,14 @@ namespace EQUOR.Controllers
                 );
 
                 return RedirectToAction("Index", "Home");
-            }else if (Consumer == null && Manager == null && Company != null)
+            }
+            else if (Consumer == null && Manager == null && Company != null)
             {
                 var claims = new List<Claim>
-        {
-            new Claim(ClaimTypes.Name, Company.Email),
-            new Claim(ClaimTypes.Role, Company.IdRole.ToString())
-        };
+    {
+        new Claim(ClaimTypes.Name, Company.Email),
+        new Claim(ClaimTypes.Role, Company.IdRole.ToString())
+    };
 
                 var claimsIdentity = new ClaimsIdentity(
                     claims,
@@ -65,10 +66,10 @@ namespace EQUOR.Controllers
             else if (Consumer == null && Manager != null && Company == null)
             {
                 var claims = new List<Claim>
-        {
-            new Claim(ClaimTypes.Name, Manager.Email),
-            new Claim(ClaimTypes.Role, Manager.IdRole.ToString())
-        };
+    {
+        new Claim(ClaimTypes.Name, Manager.Email),
+        new Claim(ClaimTypes.Role, Manager.IdRole.ToString())
+    };
 
                 var claimsIdentity = new ClaimsIdentity(
                     claims,
@@ -79,7 +80,6 @@ namespace EQUOR.Controllers
                     CookieAuthenticationDefaults.AuthenticationScheme,
                     new ClaimsPrincipal(claimsIdentity)
                 );
-
 
                 return RedirectToAction("Index", "Home");
             }

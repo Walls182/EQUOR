@@ -29,8 +29,11 @@ namespace EQUOR.Logica
                         if (reader.Read())
                         {
                             Consumer consumer = new Consumer();
-                            consumer.Email = reader.GetString(1);
-                            consumer.Password = reader.GetString(2);
+                            consumer.Email = reader.GetString(2);
+                            consumer.Password = reader.GetString(3);
+                            consumer.IdRole = reader.GetInt32(4);
+
+
                             return consumer;
                         }
                     }
@@ -55,8 +58,9 @@ namespace EQUOR.Logica
                         if (reader.Read())
                         {
                             Company company = new Company();
-                            company.Email = reader.GetString(1);
-                            company.Password = reader.GetString(2);
+                            company.Email = reader.GetString(5);
+                            company.Password = reader.GetString(6);
+                            company.IdRole = reader.GetInt32(7);
                             return company;
                         }
                     }
@@ -80,8 +84,9 @@ namespace EQUOR.Logica
                         if (reader.Read())
                         {
                             Manager manager = new Manager();
-                            manager.Email = reader.GetString(1);
-                            manager.Password = reader.GetString(2);
+                            manager.Email = reader.GetString(2);
+                            manager.Password = reader.GetString(3);
+                            manager.IdRole = reader.GetInt32(5);
                             return manager;
                         }
                     }
