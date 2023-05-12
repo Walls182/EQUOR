@@ -74,7 +74,7 @@ namespace EQUOR.Logica
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 connection.Open();
-                string sql = "SELECT * FROM Manager WHERE Email=@Email AND Password=@Password";
+                string sql = "SELECT * FROM Managers WHERE Email=@Email AND Password=@Password";
                 using (SqlCommand command = new SqlCommand(sql, connection))
                 {
                     command.Parameters.AddWithValue("@Email", _correo);
