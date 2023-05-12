@@ -14,7 +14,7 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using ZXing.Common;
 using ZXing;
-using ZXing.QrCode.Internal;
+
 
 namespace EQUOR.Controllers
 {
@@ -33,19 +33,6 @@ namespace EQUOR.Controllers
               return _context.Products != null ? 
                           View(await _context.Products.ToListAsync()) :
                           Problem("Entity set 'DataDBContext.Products'  is null.");
-        }
-        public IActionResult Scan()
-        {
-            return View();
-        }
-        public IActionResult DetailsConsumer(byte[] id)
-        {
-            var product = _context.Products.FirstOrDefault(p => p.CodigoQR == id);
-            if (product == null)
-            {
-                return NotFound();
-            }
-            return View(product);
         }
 
         // GET: Products/Details/5
