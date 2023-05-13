@@ -1,4 +1,5 @@
-﻿@model Consumer
+﻿@model IEnumerable<EQUOR.Models.Consumer>
+
 @{
     Layout = null;
 }
@@ -11,16 +12,50 @@
     <title>Index</title>
 </head>
 <body>
-
-<h1>Mi Perfil</h1>
-
-        <p>Nombre: @Model.Name</p>
-        <p>Email: @Model.Email</p>
-        <p>Password: @Model.Password</p> 
-
-<form asp-action="Update" method="post">
-    <!-- Aquí van los controles para modificar los datos -->
-    <button type="submit">Guardar cambios</button>
-</form>
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Password)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Role)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Password)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Role.IdRole)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.IdConsumer">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.IdConsumer">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.IdConsumer">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
 </body>
 </html>
