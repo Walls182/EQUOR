@@ -9,6 +9,7 @@ using EQUOR.DataContext;
 using EQUOR.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
+using System.Security.Claims;
 
 namespace EQUOR.Controllers
 {
@@ -24,8 +25,9 @@ namespace EQUOR.Controllers
         // GET: Consumers
         public async Task<IActionResult> Index()
         {
-            var dataDBContext = _context.Consumers.Include(c => c.Role);
-            return View(await dataDBContext.ToListAsync());
+            var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var user = await _context.Consumers.FindAsync(userId);
+            return View(user);
         }
 
         // GET: Consumers/Details/5
