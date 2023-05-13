@@ -1,6 +1,16 @@
+
+
+
+
+
+
+
+
+
 html {
   font-size: 14px;
 }
+
 
 @media (min-width: 768px) {
   html {
@@ -14,5 +24,15 @@ html {
 }
 
 body {
-  margin-bottom: 60px;
+    margin-bottom: 60px;
+    background-image: url('../images/fond2.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    color: #333;
 }
+.btn-azul {
+    background-color: #22577A;
+    color: #fff;
+    text-align: center;
+    margin: 4px 2px;

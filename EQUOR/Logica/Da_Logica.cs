@@ -10,7 +10,7 @@ namespace EQUOR.Logica
     public class Da_Logica
     {
 
-       public string connectionString = "Server=DESKTOP-JK7M5A1\\SQLEXPRESS;Database=EQUOR;Integrated Security=True;trustServerCertificate=True";
+       public string connectionString = "Server=DESKTOP-8M97AO9\\SQLEXPRESS;Database=DBEQUOR;Integrated Security=True;trustServerCertificate=True";
        
 
         public Consumer ValidarUsuario(string _correo, string _clave)
@@ -74,7 +74,7 @@ namespace EQUOR.Logica
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 connection.Open();
-                string sql = "SELECT * FROM Manager WHERE Email=@Email AND Password=@Password";
+                string sql = "SELECT * FROM Managers WHERE Email=@Email AND Password=@Password";
                 using (SqlCommand command = new SqlCommand(sql, connection))
                 {
                     command.Parameters.AddWithValue("@Email", _correo);

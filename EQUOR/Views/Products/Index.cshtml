@@ -4,10 +4,10 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>Productos Afilidados a Equor</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Agregar nuevo Producto</a>
 </p>
 <table class="table">
     <thead>
@@ -63,9 +63,17 @@
             <td>
                 @Html.DisplayFor(modelItem => item.QWaste)
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CodigoQR)
-            </td>
+            <tr>
+                ...
+                <td>
+                        @{
+                            string imageBase64 = Convert.ToBase64String(item.CodigoQR);
+                            string imageSrc = string.Format("data:image/png;base64,{0}", imageBase64);
+                        }
+                    <img src="@imageSrc" alt="Código QR" />
+                </td>
+                ...
+            </tr>
             <td>
                 @Html.DisplayFor(modelItem => item.CarbonFootprint)
             </td>
@@ -73,9 +81,9 @@
                 @Html.DisplayFor(modelItem => item.TimeSearch)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.IdProduct">Edit</a> |
+                
                 <a asp-action="Details" asp-route-id="@item.IdProduct">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.IdProduct">Delete</a>
+             
             </td>
         </tr>
 }
