@@ -10,7 +10,7 @@ namespace EQUOR.Logica
     public class Da_Logica
     {
 
-       public string connectionString = "Server=DESKTOP-8M97AO9\\SQLEXPRESS;Database=DBEQUOR;Integrated Security=True;trustServerCertificate=True";
+       public string connectionString = "server=DBEQUOR.mssql.somee.com;Database=DBEQUOR;Integrated Security=True;trustServerCertificate=True; User ID=Equor182_SQLLogin_1; Password=9uw6eei7ba";
        
 
         public Consumer ValidarUsuario(string _correo, string _clave)

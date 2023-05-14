@@ -63,17 +63,17 @@
             <td>
                 @Html.DisplayFor(modelItem => item.QWaste)
             </td>
-            <tr>
-                ...
-                <td>
+            <td>
+               
+                
                         @{
                             string imageBase64 = Convert.ToBase64String(item.CodigoQR);
                             string imageSrc = string.Format("data:image/png;base64,{0}", imageBase64);
                         }
-                    <img src="@imageSrc" alt="Código QR" />
-                </td>
-                ...
-            </tr>
+                    <img src="@imageSrc" alt="Código QR" width="150" height="150" />
+               
+               
+            </td>
             <td>
                 @Html.DisplayFor(modelItem => item.CarbonFootprint)
             </td>

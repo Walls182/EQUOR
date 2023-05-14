@@ -4,5 +4,128 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Manager</h1>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Escanea un código QR</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            color: #333;
+            background-color: #f7f7f7;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: #fff;
+            box-shadow: 0 2px 5px rgba(0,0,0,.2);
+            border-radius: 10px;
+        }
+
+        h1 {
+            font-size: 36px;
+            font-weight: bold;
+            margin-top: 0;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        p {
+            font-size: 18px;
+            line-height: 1.5;
+            margin-top: 0;
+            margin-bottom: 20px;
+        }
+
+        img {
+            display: block;
+            max-width: 100%;
+            height: auto;
+            margin: 0 auto;
+        }
+
+        .qr-scanner {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+            .qr-scanner video {
+                width: 100%;
+                height: auto;
+                margin: 20px 0;
+                border: 2px solid #333;
+                border-radius: 10px;
+            }
+
+        .btn-scan {
+            display: block;
+            margin: 0 auto;
+            padding: 10px 20px;
+            font-size: 24px;
+            font-weight: bold;
+            color: #fff;
+            background-color: #333;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Cómo escanear un código QR con la cámara</h1>
+        <p>Los códigos QR son una forma conveniente de acceder a información adicional sobre un producto. Si tienes un smartphone moderno, seguramente tienes la capacidad de escanear códigos QR con tu cámara. Aquí te explicamos cómo hacerlo:</p>
+        <div class="qr-scanner">
+            <video id="qr-video" autoplay></video>
+        </div>
+        <button class="btn-scan" id="btn-scan">Escanear código QR</button>
+    </div>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsqr/1.4.0/jsQR.min.js"></script>
+    <script>
+        // Seleccionar el elemento de video y canvas
+        const video = document.querySelector('video');
+        const canvas = document.querySelector('canvas');
+        const canvasCtx = canvas.getContext('2d');
+
+        // Acceder a la cámara del dispositivo
+        navigator.mediaDevices.getUserMedia({ video: true }).then(function (stream) {
+            video.srcObject = stream;
+            video.play();
+        }).catch(function (err) {
+            console.log(`Error: ${err}`);
+        });
+
+        // Detectar el código QR
+        function detectQR() {
+            canvasCtx.drawImage(video, 0, 0, canvas.width, canvas.height);
+            const imageData = canvasCtx.getImageData(0, 0, canvas.width, canvas.height);
+            const code = jsQR(imageData.data, imageData.width, imageData.height);
+
+            if (code) {
+                console.log(`Código QR detectado: ${code.data}`);
+                // Redirigir a otra página
+                window.location.href = "https://www.example.com/producto/" + code.data;
+            } else {
+                requestAnimationFrame(detectQR);
+            }
+        }
+
+        // Iniciar la detección del código QR
+        video.addEventListener('loadedmetadata', function () {
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            requestAnimationFrame(detectQR);
+        });
+    </script>
+</body>
+
 

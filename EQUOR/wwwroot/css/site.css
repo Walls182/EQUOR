@@ -29,10 +29,16 @@ body {
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
-    color: #333;
+    color: #fff;
 }
 .btn-azul {
     background-color: #22577A;
     color: #fff;
     text-align: center;
     margin: 4px 2px;
+}
+    table
+
+{
+    background-color: #ffffff; 
+}

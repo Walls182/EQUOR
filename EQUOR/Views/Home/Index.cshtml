@@ -2,7 +2,38 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container">
+    <div class="jumbotron">
+        <h1 class="display-4">Bienvenido a nuestra página sostenible</h1>
+        <p class="lead">Aquí podrás encontrar información sobre la huella de carbono de los productos que consumes y descubrir alternativas más sostenibles.</p>
+        <hr class="my-4">
+        <p>Si eres una empresa interesada en registrar tus productos, contáctanos para obtener más información.</p>
+        <a class="btn btn-primary btn-lg" href="#" role="button">Contactar</a>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4">
+            <h2>Escanear</h2>
+            <p>Escanea el código de barras de tus productos y descubre su huella de carbono.</p>
+            <p><a class="btn btn-secondary" asp-controller="Home" asp-action="Manager" role="button">Leer más &raquo;</a></p>
+        </div>
+        <div class="col-md-4">
+            <h2>Buscar</h2>
+            <p>Busca productos y compara su huella de carbono para tomar decisiones más sostenibles.</p>
+            <p><a class="btn btn-secondary" asp-controller="Home" asp-action="Company" role="button">Leer más &raquo;</a></p>
+        </div>
+        <div class="col-md-4">
+            <h2>Registrar</h2>
+            <p>Registra tus productos en nuestra base de datos para que los consumidores puedan encontrarlos.</p>
+            <p><a class="btn btn-secondary" asp-controller="Opinions" asp-action="Index" role="button">Leer más &raquo;</a></p>
+            
+        </div>
+    </div>
+
+    <hr>
+
+    <footer>
+        <p>&copy; 2023 - Nuestra página sostenible</p>
+    </footer>
 </div>
+
